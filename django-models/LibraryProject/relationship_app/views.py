@@ -10,7 +10,7 @@ from .models import Book
 def book_list(request):
     books = Book.objects.all()  # Fetch all book instances from the database
     context = {'book_list': books}  # Create a context dictionary with book list
-    return render(request, 'books/book_list.html', context)
+    return render(request, 'books/list_books.html', context)
 
 from django.views.generic import DetailView , ListView
 from .models import Book
