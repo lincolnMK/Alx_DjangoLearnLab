@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView
 
-from .models import Book, Library
+from .models import Book
 
 def book_list(request):
     books = Book.objects.all()
@@ -17,6 +17,9 @@ class BookDetailView(DetailView):
     template_name = 'books/book_detail.html'
     context_object_name = 'book'
 
+
+
+from .models import Library
 
 class LibraryDetailView(DetailView):
     model = Library
