@@ -16,6 +16,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 from .models import Book
 
+@login_required
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {
@@ -35,6 +36,7 @@ class LibraryDetailView(DetailView):
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
 
+	
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -62,3 +64,15 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
+
+
+
+@login_required
+def book_detail(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    return render(request, 'relationship_app/book_detail.html', {'book': book})
+
+@login_required
+def library_detail(request, pk):
+    library = get_object_or_404(Library, pk=pk)
+    return render(request, 'relationship_app/library_detail.html', {'library': library})
