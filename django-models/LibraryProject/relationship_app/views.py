@@ -1,11 +1,15 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+
+from .models import Library
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
+
 
 from .models import Book
 
-def book_list(request):
+def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {
         'books': books
@@ -18,9 +22,6 @@ class BookDetailView(DetailView):
     context_object_name = 'book'
 
 
-
-from .models import Library
-from django.views.generic.detail import DetailView
 
 class LibraryDetailView(DetailView):
     model = Library
