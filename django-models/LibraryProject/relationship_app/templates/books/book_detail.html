@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }} - Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 1.1rem;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .book-detail {
+            border: 1px solid #ddd;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="book-detail">
+        <h1>{{ book.title }}</h1>
+        <p><strong>Author:</strong> {{ book.author.name }}</p>
+
+        {% if book.id %}
+        <p><strong>Book ID:</strong> {{ book.id }}</p>
+        {% endif %}
+
+        <!-- Back link -->
+        {% comment %}
+        Update this URL to match your actual book list URL.
+        Example: /relationship_app/books/
+        {% endcomment %}
+        <p><a href="/relationship_app/books/">← Back to Book List</a></p>
+    </div>
+</body>
+</html>
