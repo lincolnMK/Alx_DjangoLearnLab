@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView
 
 from .models import Book
 
@@ -20,6 +20,7 @@ class BookDetailView(DetailView):
 
 
 from .models import Library
+from django.views.generic.detail import DetailView
 
 class LibraryDetailView(DetailView):
     model = Library
