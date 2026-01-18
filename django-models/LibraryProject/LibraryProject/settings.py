@@ -121,4 +121,4 @@ STATIC_URL = 'static/'
 
 LOGIN_URL = 'relationship_app:login'
 LOGIN_REDIRECT_URL = 'relationship_app:books'  # or any page you want after login
-LOGOUT_REDIRECT_URL = 'relationship_app:login'
+LOGOUT_REDIRECT_URL = 'login'

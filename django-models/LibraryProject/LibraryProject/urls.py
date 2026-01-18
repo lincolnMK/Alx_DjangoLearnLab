@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 from django.views.generic import RedirectView
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from relationship_app import views as rel_views
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
     path('relationship_app/', include("relationship_app.urls")),
     path('', RedirectView.as_view(url='/relationship_app/', permanent=False)), 
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
-    path('register/', rel_views.register_view, name='register'),
+    path ('logout/', LogoutView.as_view(template_name='relationship_/logout.html'), name='logout'),
+    path('register/', rel_views.register, name='register'),
 ]
 
