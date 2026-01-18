@@ -119,6 +119,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-LOGIN_URL = 'relationship_app:login'
-LOGIN_REDIRECT_URL = 'relationship_app:books'  # or any page you want after login
-LOGOUT_REDIRECT_URL = 'login'
+
+LOGIN_REDIRECT_URL = 'role_based_redirect'
+
+LOGIN_URL = '/relationship_app/login/'
+
+
+LOGOUT_REDIRECT_URL = '/admin/login/'

@@ -16,17 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic.base import TemplateView
 from django.views.generic import RedirectView
-from django.contrib.auth.views import LoginView, LogoutView
-from relationship_app import views as rel_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('relationship_app/', include("relationship_app.urls")),
-    path('', RedirectView.as_view(url='/relationship_app/', permanent=False)), 
-    path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name='login'),
-    path ('logout/', LogoutView.as_view(template_name='relationship_/logout.html'), name='logout'),
-    path('register/', rel_views.register, name='register'),
-]
 
+    # Include all app URLs (login, logout, register, dashboard are defined in the app)
+    path('relationship_app/', include("relationship_app.urls")),
+
+    # Redirect root URL to your app
+    path('', RedirectView.as_view(url='/relationship_app/', permanent=False)),
+]

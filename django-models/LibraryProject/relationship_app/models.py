@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Author(models.Model):
@@ -30,3 +31,46 @@ class Librarian(models.Model):
     library = models.OneToOneField(Library, on_delete=models.CASCADE, related_name='libraries')
     def __str__(self):
         return self.name
+    
+
+class UserProfile(models.Model):
+    # Link to Django's User model
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # Role choices
+    ROLE_CHOICES = [
+        ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Member')
+
+    def __str__(self):
+        return f"{self.user.username} ({self.role})"
+    
+
+
+# relationship_app/models.py
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+# Signal to create UserProfile automatically
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+# Optional: save profile when User is saved
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.userprofile.save()
+
+
+def is_admin(user):
+    return user.is_authenticated and user.userprofile.role == 'Admin'
+
+def is_librarian(user):
+    return user.is_authenticated and user.userprofile.role == 'Librarian'
+
+def is_member(user):
+    return user.is_authenticated and user.userprofile.role == 'Member'

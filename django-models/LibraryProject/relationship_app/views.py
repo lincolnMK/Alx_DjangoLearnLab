@@ -60,7 +60,7 @@ def register(request):
         if form.is_valid():
             user = form.save()  # create the new user
             login(request, user)  # log them in immediately
-            return redirect('relationship_app:dashboard')  # redirect to dashboard or home
+            return redirect('role_based_redirect')  # redirect to dashboard or home
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
@@ -76,3 +76,51 @@ def book_detail(request, pk):
 def library_detail(request, pk):
     library = get_object_or_404(Library, pk=pk)
     return render(request, 'relationship_app/library_detail.html', {'library': library})
+
+
+
+# relationship_app/admin_view.py
+from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
+from .models import is_admin
+
+@user_passes_test(is_admin, login_url='login')
+def admin_dashboard(request):
+    # Your admin-specific logic here
+    return render(request, 'relationship_app/admin_view.html')
+
+
+# relationship_app/librarian_view.py
+from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
+from .models import is_librarian
+
+@user_passes_test(is_librarian, login_url='login')
+def librarian_dashboard(request):
+    # Librarian-specific logic
+    return render(request, 'relationship_app/librarian_view.html')
+
+
+# relationship_app/member_view.py
+from django.shortcuts import render
+from django.contrib.auth.decorators import user_passes_test
+from .models import is_member
+
+@user_passes_test(is_member, login_url='login')
+def member_dashboard(request):
+    # Member-specific logic
+    return render(request, 'relationship_app/member_view.html')
+
+
+# relationship_app/views.py
+from django.shortcuts import redirect
+
+@login_required
+def role_based_redirect(request):
+    role = request.user.userprofile.role
+    if role == 'Admin':
+        return redirect('admin_dashboard')
+    elif role == 'Librarian':
+        return redirect('librarian_dashboard')
+    else:
+        return redirect('member_dashboard')
