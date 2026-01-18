@@ -124,3 +124,33 @@ def role_based_redirect(request):
         return redirect('librarian_dashboard')
     else:
         return redirect('member_dashboard')
+
+
+# member_view.py
+from django.contrib.auth.decorators import user_passes_test, login_required
+from .models import is_member
+
+@login_required
+@user_passes_test(is_member, login_url='login')
+def member_task(request):
+    # Only accessible by Members
+    return render(request, 'relationship_app/member_task.html')
+
+# librarian_view.py
+from .models import is_librarian
+
+@login_required
+@user_passes_test(is_librarian, login_url='login')
+def librarian_task(request):
+    # Only accessible by Librarians
+    return render(request, 'relationship_app/librarian_task.html')
+
+# admin_view.py
+from .models import is_admin
+
+@login_required
+@user_passes_test(is_admin, login_url='login')
+def admin_task(request):
+    # Only accessible by Admins
+    return render(request, 'relationship_app/admin_task.html')
+
