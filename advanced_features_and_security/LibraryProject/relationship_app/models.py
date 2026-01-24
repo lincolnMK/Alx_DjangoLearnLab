@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 class Author(models.Model):
@@ -42,7 +42,7 @@ class Librarian(models.Model):
 
 class UserProfile(models.Model):
     # Link to Django's User model
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField( settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     # Role choices
     ROLE_CHOICES = [
@@ -62,13 +62,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 # Signal to create UserProfile automatically
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
 
 # Optional: save profile when User is saved
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
 
