@@ -1,11 +1,24 @@
 from urllib import request
 from django.shortcuts import render
-
+from .forms import ExampleForm
+from django.contrib.auth.decorators import permission_required
 from LibraryProject.bookshelf.models import Book
 
 # Create your views here.
 
+def example_form_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            # Process the form data
+            title = form.cleaned_data['title']
+            author = form.cleaned_data['author']
+            isbn = form.cleaned_data['isbn']
+            # Save to database or perform other actions
+    else:
+        form = ExampleForm()
 
+    return render(request, 'bookshelf/form_example.html', {'form': form})
 
 @permission_required('bookshelf.can_edit', raise_exception=True)
 def edit_book(request, book_id):
