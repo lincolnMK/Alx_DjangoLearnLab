@@ -29,7 +29,7 @@ def edit_book(request, book_id):
 def book_list(request):
     # Logic to view a book
     books = Book.objects.all()
-    return render(request, 'bookshelf/list_books.html', {
+    return render(request, 'bookshelf/book_list.html', {
         'books': books
     })
 
