@@ -23,9 +23,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-lvk+@ccu1-&a1sqv^qh($ddvus%=^d1ohi@@m_#8q43(y9#obk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False  # production setting
 
 ALLOWED_HOSTS = []
+SECURE_BROWSER_XSS_FILTER = True #Enables the browser’s built-in XSS filter
+X_FRAME_OPTIONS = 'DENY' #Prevents the site from being framed to protect against clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True #Prevents the browser from MIME-sniffing a response away from the declared content-type
+
+
+CSRF_COOKIE_SECURE = True #Ensures CSRF cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True #Ensures session cookies are only sent over HTTPS
+SECURE_SSL_REDIRECT = True #Redirects all non-HTTPS requests to HTTPS
+
 
 
 # Application definition
@@ -39,10 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf.apps.BookshelfConfig',
     'relationship_app.apps.RelationshipAppConfig',
+    'csp',
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -130,3 +142,19 @@ LOGIN_URL = '/relationship_app/login/'
 
 
 LOGOUT_REDIRECT_URL = '/admin/login/'
+
+#csp rules 
+CSP_DEFAULT_SRC = ("'self'",)
+
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+
+CSP_IMG_SRC = ("'self'", "data:")
+CSP_FONT_SRC = ("'self'",)
+
+CSP_CONNECT_SRC = ("'self'",)
+CSP_FRAME_SRC = ("'none'",)
+
+CSP_OBJECT_SRC = ("'none'",)
+CSP_BASE_URI = ("'self'",)
+CSP_FORM_ACTION = ("'self'",)
