@@ -1,4 +1,4 @@
-#!/home/kings/Alx_DjangoLearnLab/Introduction_to_Django/alx_learn/bin/python3
+#!/home/kings/Alx_DjangoLearnLab/Introduction_to_Django/alx_learn/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
