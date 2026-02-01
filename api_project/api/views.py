@@ -2,7 +2,7 @@ from django import http
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from api.models import Book
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import viewsets
 from .serializers import BookSerializer
 from rest_framework.response import Response
 
@@ -12,9 +12,10 @@ class BookList(ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     
-class BookViewSet(ModelViewSet):
+class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
     
 @api_view(['GET', 'POST'])   
 def Book_List(request):
