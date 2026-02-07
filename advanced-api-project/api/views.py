@@ -16,6 +16,7 @@ from rest_framework import generics
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 # Book Views
 class BookList(generics.ListCreateAPIView):
