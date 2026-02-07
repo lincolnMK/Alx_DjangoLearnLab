@@ -13,7 +13,7 @@ will Use DRF’s DjangoFilterBackend or similar tools to set up comprehensive fi
 
 
 '''
-
+from django_filters import rest_framework
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Book, Author
