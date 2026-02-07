@@ -1,3 +1,4 @@
+from warnings import filters
 from django.shortcuts import render
 
 # Create your views here.
@@ -13,21 +14,24 @@ will Use DRF’s DjangoFilterBackend or similar tools to set up comprehensive fi
 
 '''
 
-from rest_framework import generics
+from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
-from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from django_filters import rest_framework
 
-# Book Views
 class BookList(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [rest_framework.DjangoFilterBackend, rest_framework.OrderingFilter]
+
+    # Correct filter backends
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    # Fields to filter by
+    filterset_fields = ['title', 'author__name', 'publication_year']
     search_fields = ['title', 'author__name']
     ordering_fields = ['publication_year', 'title']
+
 
 
 class BookDetail(generics.RetrieveUpdateDestroyAPIView):
