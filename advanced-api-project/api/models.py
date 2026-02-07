@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework import filters
 
 # Create your models here.
 class Author(models.Model): # this is the author model with details of the author
@@ -10,6 +11,11 @@ class Book(models.Model): # this is the book model containing details for the bo
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, related_name='books', on_delete=models.CASCADE)
     publication_year = models.DateField()
+    search_fields = ['title', 'author__name']
+    ordering_fields = ['publication_year', 'title']
+    orderingFilter = ['publication_year', 'title']
+
+    
 
     def __str__(self):
         return self.title
