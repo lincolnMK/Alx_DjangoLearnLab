@@ -1,5 +1,5 @@
 from django.db import models
-from rest_framework import filters
+from django_filters import rest_framework
 
 # Create your models here.
 class Author(models.Model): # this is the author model with details of the author
