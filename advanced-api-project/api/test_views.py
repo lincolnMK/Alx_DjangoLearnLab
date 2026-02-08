@@ -158,3 +158,25 @@ class AuthenticatedBookActionsTests(BaseAPITestCase):
         url = reverse('book-update', args=[self.book.id])
         response = self.client.put(url, {})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class BookSessionAuthTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.author = Author.objects.create(name='George Orwell')
+
+    def test_create_book_with_login(self):
+    # Log in user via Django session
+        login_successful = self.client.login(username='testuser', password='password123')
+        self.assertTrue(login_successful)
+
+        data = {
+            'title': 'Animal Farm',
+            'author': self.author.id,
+            'publication_year': 1945
+        }
+
+    # Use the correct URL
+        url = reverse('book-create')
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
