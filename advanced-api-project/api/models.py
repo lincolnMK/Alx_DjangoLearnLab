@@ -10,7 +10,7 @@ class Author(models.Model): # this is the author model with details of the autho
 class Book(models.Model): # this is the book model containing details for the book including the author and publication year
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, related_name='books', on_delete=models.CASCADE)
-    publication_year = models.DateField()
+    publication_year = models.IntegerField()
     search_fields = ['title', 'author__name']
     ordering_fields = ['publication_year', 'title']
     orderingFilter = ['publication_year', 'title']

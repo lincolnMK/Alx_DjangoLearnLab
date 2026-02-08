@@ -1,4 +1,4 @@
-#!/home/kings/Alx_DjangoLearnLab/advanced-api-project/advance-api/bin/python3
+#!/home/kings/Alx_DjangoLearnLab/advanced-api-project/advance-api/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
