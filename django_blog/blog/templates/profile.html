@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>Profile</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <h3>Update User Info</h3>
+    {{ u_form.non_field_errors }}
+    <div>
+        <label>Username:</label>
+        {{ u_form.username }}
+        {{ u_form.username.errors }}
+    </div>
+    <div>
+        <label>Email:</label>
+        {{ u_form.email }}
+        {{ u_form.email.errors }}
+    </div>
+
+    <h3>Update Profile</h3>
+    <div>
+        <label>Bio:</label>
+        {{ p_form.bio }}
+        {{ p_form.bio.errors }}
+    </div>
+
+    <button type="submit">Update Profile</button>
+</form>
+{% endblock %}

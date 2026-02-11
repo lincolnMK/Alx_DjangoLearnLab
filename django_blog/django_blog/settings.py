@@ -140,3 +140,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
+LOGIN_REDIRECT_URL = 'profile'  # Redirect to posts list after login
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
