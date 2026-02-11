@@ -21,7 +21,7 @@ def register(request):
     else:
         form = CustomUserCreationForm()
 
-    return render(request, "registration/register.html", {"form": form})
+    return render(request, "blog/register.html", {"form": form})
 
 
 from django.contrib.auth.decorators import login_required
