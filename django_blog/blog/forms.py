@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Post, Profile, Comment
 from django.core.exceptions import ValidationError
+from taggit.forms import TagWidget
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -38,12 +39,11 @@ class PostForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'tags': forms.TextInput(attrs={
+            'tags': TagWidget(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter tags separated by commas'
             }),
         }
-
     def clean_content(self):
         data = self.cleaned_data.get('content', '')
 
