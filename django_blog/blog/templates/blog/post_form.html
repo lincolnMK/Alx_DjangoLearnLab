@@ -1,0 +1,44 @@
+{% extends "blog/base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2>
+                {% if object %}
+                    Update Post
+                {% else %}
+                    Create Post
+                {% endif %}
+            </h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Content</label>
+                    {{ form.content }}
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    {% if object %}
+                        Update
+                    {% else %}
+                        Publish
+                    {% endif %}
+                </button>
+
+                <a href="{% url 'post-list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
