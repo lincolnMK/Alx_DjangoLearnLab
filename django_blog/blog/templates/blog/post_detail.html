@@ -21,6 +21,20 @@
             {% endif %}
             <a href="{% url 'post-list' %}" class="btn btn-secondary btn-sm">Back to Posts</a>
         </div>
+
+            <p>
+                Tags:
+                {% for tag in object.tags.all %}
+                    <a href="{% url 'tag-posts' tag.slug %}" class="badge bg-secondary">
+                        {{ tag.name }}
+                    </a>
+                {% empty %}
+                    <span class="text-muted">No tags</span>
+                {% endfor %}
+            </p>
+
+
+
     </div>
 
     <!-- Comments Section -->
@@ -49,7 +63,7 @@
         <div class="card mt-3 mb-4">
             <div class="card-body">
                 <h5>Add a Comment</h5>
-                <form method="POST" action="{% url 'comment-create' post_pk=object.pk %}">
+                <form method="POST" action="{% url 'comment-create' pk=object.pk %}">
                     {% csrf_token %}
                     {{ comment_form.as_p }}
                     <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>

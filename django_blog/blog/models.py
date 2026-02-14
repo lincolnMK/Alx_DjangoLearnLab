@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 # Create your models here.
@@ -9,6 +10,7 @@ class Post(models.Model):
     content = models.TextField()
     published_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    tags = TaggableManager(blank=True)  # Add tags field
     def __str__(self):
         return self.title
     def get_absolute_url(self):
@@ -48,4 +50,3 @@ class Comment(models.Model):
     def get_absolute_url(self):
         # Redirect to the post detail page after creating a comment
         return reverse('post-detail', kwargs={'pk': self.post.pk})
-    

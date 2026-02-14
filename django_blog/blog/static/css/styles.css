@@ -43,3 +43,21 @@ footer {
     background-color: #333;
     color: white;
 }
+
+header nav ul {
+    display: flex;              /* Arrange items in a row */
+    align-items: center;        /* Vertically center them */
+    justify-content: space-between; /* Spread items across the header */
+    list-style: none;           /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    margin: 0 10px;             /* Add spacing between items */
+}
+
+header nav ul li form {
+    display: flex;              /* Keep form elements inline */
+    align-items: center;
+}

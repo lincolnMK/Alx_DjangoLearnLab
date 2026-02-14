@@ -14,17 +14,38 @@
 
             <form method="POST">
                 {% csrf_token %}
-                
+
+                <!-- Title -->
                 <div class="mb-3">
                     <label class="form-label">Title</label>
                     {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="text-danger small">{{ form.title.errors }}</div>
+                    {% endif %}
                 </div>
 
+                <!-- Content -->
                 <div class="mb-3">
                     <label class="form-label">Content</label>
                     {{ form.content }}
+                    {% if form.content.errors %}
+                        <div class="text-danger small">{{ form.content.errors }}</div>
+                    {% endif %}
                 </div>
 
+                <!-- Tags (Taggit) -->
+                <div class="mb-3">
+                    <label for="id_tags" class="form-label">Tags</label>
+                    {{ form.tags }}
+                    <small class="text-muted">
+                        Separate tags with commas (e.g. django, python, api)
+                    </small>
+                    {% if form.tags.errors %}
+                        <div class="text-danger small">{{ form.tags.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
                 <button type="submit" class="btn btn-success">
                     {% if object %}
                         Update
@@ -36,6 +57,7 @@
                 <a href="{% url 'post-list' %}" class="btn btn-secondary">
                     Cancel
                 </a>
+
             </form>
         </div>
     </div>

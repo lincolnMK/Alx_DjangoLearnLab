@@ -9,7 +9,8 @@ from .views import (
     PostDetailView,
     PostCreateView,
     PostUpdateView,
-    PostDeleteView
+    PostDeleteView,
+    TaggedPostListView
 )
 
 
@@ -21,6 +22,9 @@ from .views import (
 )
 
 from .views import home
+from .views import PostSearchView
+
+
 urlpatterns = [
     # Built-in authentication views
    path('', home, name='home'),  # Home page
@@ -49,4 +53,8 @@ urlpatterns = [
     path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment-create'),
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
+    path('tag/<slug:slug>/', TaggedPostListView.as_view(), name='tag-posts'),
+    path("search/", PostSearchView.as_view(), name="post-search"),
+
+
 ]
