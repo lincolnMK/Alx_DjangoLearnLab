@@ -1,3 +1,4 @@
+import token
 from django.shortcuts import render
 from rest_framework.views import APIView
 from .serializers import UserSerializer
@@ -6,7 +7,6 @@ from .serializers import UserSerializer
 
 #Implement views and serializers in the accounts app for user registration, login, and token retrieval.
 from rest_framework import generics, permissions
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from .models import User
@@ -22,9 +22,9 @@ class RegisterView(APIView):
         if serializer.is_valid():
             user = serializer.save()
 
-            # Create token automatically
-            token = Token.objects.create(user=user)
-
+           # Get the token created in serializer
+            token = Token.objects.get(user=user)
+            
             return Response({
                 "token": token.key,
                 "user_id": user.id,
