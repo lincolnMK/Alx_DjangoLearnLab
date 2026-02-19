@@ -74,7 +74,7 @@ class follow_user(APIView):
         except CustomUser.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
-class unfollow_user(APIView):
+class unfollow_user(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
@@ -99,7 +99,7 @@ class unfollow_user(APIView):
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
 
-class followers_list(APIView):
+class followers_list(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -107,7 +107,7 @@ class followers_list(APIView):
         serializer = UserSerializer(followers, many=True)
         return Response(serializer.data)
     
-class following_list(APIView):
+class following_list(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
