@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 
-from accounts.views import Feed
-from .views import PostViewSet, CommentViewSet
+
+from .views import PostViewSet, CommentViewSet, Feed
 from django.urls import path, include
 
 

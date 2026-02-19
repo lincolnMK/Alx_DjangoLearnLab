@@ -115,13 +115,3 @@ class following_list(APIView):
         serializer = UserSerializer(following, many=True)
         return Response(serializer.data)
 
-class Feed(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = PostSerializer  # required
-
-    def get(self, request):
-        following = request.user.following.all()
-        posts = Post.objects.filter(author__in=following).order_by('-created_at')
-
-        serializer = self.get_serializer(posts, many=True)
-        return Response(serializer.data)

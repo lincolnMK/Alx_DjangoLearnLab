@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Feed, LoginView, RegisterView, UserProfileView, follow_user, unfollow_user
+from .views import LoginView, RegisterView, UserProfileView, follow_user, unfollow_user
 
 
 

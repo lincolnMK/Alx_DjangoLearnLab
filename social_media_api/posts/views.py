@@ -8,7 +8,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
-
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import permissions
 
 # Create your views here.
 # List all posts
@@ -55,3 +57,14 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+class Feed(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = PostSerializer  # required
+
+    def get(self, request):
+        following = request.user.following.all()
+        posts = Post.objects.filter(author__in=following).order_by('-created_at')
+
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)
