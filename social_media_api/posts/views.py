@@ -63,8 +63,10 @@ class Feed(generics.GenericAPIView):
     serializer_class = PostSerializer  # required
 
     def get(self, request):
-        following = request.user.following.all()
-        posts = Post.objects.filter(author__in=following).order_by('-created_at')
+       
+        following_users = request.user.following.all()
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+       
 
         serializer = self.get_serializer(posts, many=True)
         return Response(serializer.data)
