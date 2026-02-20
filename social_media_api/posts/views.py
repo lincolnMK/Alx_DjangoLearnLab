@@ -2,15 +2,19 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Post, Comment
+from .models import Like, Post, Comment
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Post, Comment
+from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import permissions
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from notifications.models import Notification
 
 # Create your views here.
 # List all posts
@@ -70,3 +74,46 @@ class Feed(generics.GenericAPIView):
 
         serializer = self.get_serializer(posts, many=True)
         return Response(serializer.data)
+    
+
+class LikePostView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+
+        like, created = Like.objects.get_or_create(
+            post=post,
+            user=request.user
+        )
+
+        if not created:
+            # Already liked → unlike
+            like.delete()
+
+            # Delete related notification (if exists)
+            Notification.objects.filter(
+                recipient=post.author,
+                sender=request.user,
+                post=post,
+                notification_type="like"
+            ).delete()
+
+            return Response(
+                {"status": "unliked"},
+                status=status.HTTP_200_OK
+            )
+
+        # If newly liked → create notification
+        if post.author != request.user:
+            Notification.objects.create(
+                recipient=post.author,
+                sender=request.user,
+                post=post,
+                notification_type="like"
+            )
+
+        return Response(
+            {"status": "liked"},
+            status=status.HTTP_201_CREATED
+        )
