@@ -82,11 +82,8 @@ class LikePostView(generics.GenericAPIView):
     def post(self, request, pk):
         post = generics.get_object_or_404(Post, pk=pk)
 
-        like, created = Like.objects.get_or_create(
-            post=post,
-            user=request.user
-        )
-
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+ #Like.objects.get_or_create(user=request.user, post=post)"]
         content_type = ContentType.objects.get_for_model(post)
 
         # If already liked → UNLIKE
@@ -121,3 +118,4 @@ class LikePostView(generics.GenericAPIView):
             {"status": "liked"},
             status=status.HTTP_201_CREATED
         )
+    #Like.objects.get_or_create(user=request.user, post=post)"]
