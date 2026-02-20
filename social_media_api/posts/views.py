@@ -96,7 +96,7 @@ class LikePostView(generics.GenericAPIView):
                 recipient=post.author,
                 sender=request.user,
                 post=post,
-                notification_type="like"
+                verb="like"
             ).delete()
 
             return Response(
@@ -110,7 +110,7 @@ class LikePostView(generics.GenericAPIView):
                 recipient=post.author,
                 sender=request.user,
                 post=post,
-                notification_type="like"
+                verb="like"
             )
 
         return Response(

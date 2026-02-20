@@ -10,7 +10,7 @@ class Notification(models.Model):
 
     recipient = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='notifications')
     actor = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='sent_notifications')
-    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    verb = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     post = models.ForeignKey('posts.Post', on_delete=models.CASCADE, null=True, blank=True)
     comment = models.ForeignKey('posts.Comment', on_delete=models.CASCADE, null=True, blank=True)
     like = models.ForeignKey('posts.Like', on_delete=models.CASCADE, null=True, blank=True)
