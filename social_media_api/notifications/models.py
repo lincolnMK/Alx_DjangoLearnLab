@@ -1,21 +1,47 @@
 from django.db import models
 
 # Create your models here.
+
+
+from django.db import models
+from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
+
+User = get_user_model()
+
 class Notification(models.Model):
-    NOTIFICATION_TYPES = (
-        ('like', 'Like'),
-        ('comment', 'Comment'),
-        ('follow', 'Follow'),
+    recipient = models.ForeignKey(
+        User,
+        related_name='notifications',
+        on_delete=models.CASCADE
     )
 
-    recipient = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='notifications')
-    actor = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='sent_notifications')
-    verb = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
-    post = models.ForeignKey('posts.Post', on_delete=models.CASCADE, null=True, blank=True)
-    comment = models.ForeignKey('posts.Comment', on_delete=models.CASCADE, null=True, blank=True)
-    like = models.ForeignKey('posts.Like', on_delete=models.CASCADE, null=True, blank=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    actor = models.ForeignKey(
+        User,
+        related_name='actions',
+        on_delete=models.CASCADE
+    )
+
+    verb = models.CharField(max_length=255)
+
+    # Generic relation fields
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE, null=True,
+    blank=True
+    )
+
+    target = GenericForeignKey('content_type', 'object_id')
+    object_id = models.PositiveIntegerField(null=True,
+    blank=True)
+
+    timestamp = models.DateTimeField(default=timezone.now)
     is_read = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-timestamp']
+
     def __str__(self):
-        return f'Notification from {self.actor.username} to {self.recipient.username} - {self.notification_type}'
+        return f"{self.actor} {self.verb} {self.target}"
