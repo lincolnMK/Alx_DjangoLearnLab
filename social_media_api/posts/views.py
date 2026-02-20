@@ -5,16 +5,15 @@ from django.urls import reverse_lazy
 from .models import Like, Post, Comment
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Post, Comment, Like
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework import generics, permissions, status
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from notifications.models import Notification
+from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 # List all posts
@@ -74,29 +73,33 @@ class Feed(generics.GenericAPIView):
 
         serializer = self.get_serializer(posts, many=True)
         return Response(serializer.data)
-    
+  
+
 
 class LikePostView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
+    def post(self, request, pk):
+        post = generics.get_object_or_404(Post, pk=pk)
 
         like, created = Like.objects.get_or_create(
             post=post,
             user=request.user
         )
 
+        content_type = ContentType.objects.get_for_model(post)
+
+        # If already liked → UNLIKE
         if not created:
-            # Already liked → unlike
             like.delete()
 
-            # Delete related notification (if exists)
+            # Delete existing notification
             Notification.objects.filter(
                 recipient=post.author,
-                sender=request.user,
-                post=post,
-                verb="like"
+                actor=request.user,
+                verb="liked",
+                content_type=content_type,
+                object_id=post.id
             ).delete()
 
             return Response(
@@ -108,9 +111,10 @@ class LikePostView(generics.GenericAPIView):
         if post.author != request.user:
             Notification.objects.create(
                 recipient=post.author,
-                sender=request.user,
-                post=post,
-                verb="like"
+                actor=request.user,
+                verb="liked",
+                content_type=content_type,
+                object_id=post.pk
             )
 
         return Response(
